@@ -1,5 +1,7 @@
 #include <iostream>
 #include <stdio.h>
+#include <string.h>
+#include <strings.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -41,6 +43,11 @@ TcpClientSide::SendAndReceive()
 		if (!strncmp(buf, "exit", 4)) {
 			keep_running = false;
 			continue;
+		}
+
+		// Make sure command is terminated by newline
+		if (buf[strlen(buf)-1] != '\n') {
+			strcat(buf, "\n");
 		}
 
 		client->send(buf);
