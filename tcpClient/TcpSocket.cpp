@@ -35,6 +35,8 @@ TcpSocket::set_send_timeout(int msec)
   struct timeval t;
   t.tv_sec  =  msec / 1000;
   t.tv_usec = (msec % 1000) * 1000;
+  // @JP@ repetitive code shall be replaced by helper function
+  // @JP@ in modern C++, std::chrono types are more appropriate
 
   if (setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, &t, sizeof(struct timeval)) < 0) {
     //LOG(LOGID_ERROR, "Failed to set socket send timeout: %m");
@@ -141,6 +143,7 @@ TcpSocket::readSome(void* buf, size_t len, bool* timeout, int msecs)
   t.tv_usec = (msecs % 1000) * 1000;
 
   // delay until we get some data or timeout
+  // @JP@ DRY principle not met
   FD_ZERO(&fds);
   FD_SET(sock, &fds);
   int n = select(sock + 1, &fds, 0, 0, (timeout == 0) ? 0 : &t);
@@ -164,7 +167,7 @@ TcpSocket::readSome(void* buf, size_t len, bool* timeout, int msecs)
 bool
 TcpSocket::read_buf(void *buf, size_t len)
 {
-  char* p = (char*) buf;
+  char* p = (char*) buf; // @JP@ c-style cast
   while (len > 0) {
     ssize_t nread = recv(sock, p, len, 0);
 
