@@ -7,6 +7,7 @@
 
 class TcpClient : public TcpSocket {
 public:
+  // @JP@ no way for doing this in modern C++: shall return std::unique_ptr<TcpClient>
   static TcpClient* create();
   virtual ~TcpClient();
 

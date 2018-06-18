@@ -2,12 +2,12 @@
 #define _TCP_SOCKET_H_
 
 #include <stddef.h>
-#include <netinet/in.h>
+#include <netinet/in.h> // @JP@ why here?
 
 class TcpSocket {
 public:
   TcpSocket(int fd);
-   virtual ~TcpSocket();
+   virtual ~TcpSocket(); // @JP@ what does this implies in term of special member functions generation?
 
   bool send(const void *buf, size_t len);
   bool send(const char *str);

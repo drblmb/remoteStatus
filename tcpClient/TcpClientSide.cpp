@@ -34,7 +34,7 @@ TcpClientSide::SendAndReceive()
 	client = TcpClient::create();
 	if (!client || !client->connect(target_host, target_port)) {
 		perror("Error: ");
-		return false;
+		return false; // @JP@ client memory leak here, see my other comment related to a smart ptr
 	}
 
 	while(keep_running) {
@@ -72,6 +72,12 @@ int main(int argc, char **argv) {
 	}
 
 	TcpClientSide *tcpClient = new TcpClientSide(argv[1], atoi(argv[2]));
+	// @JP@ tcpClient memory leak here; I'm aware of exiting the program here, but why don't allocate the tcpClient on Stack?
+	// TcpClientSide tcpClient(argv[1], atoi(argv[2]));
+	// tcpClient.SendAndReceive();
 
 	tcpClient->SendAndReceive();	
+
+	// @JP@ the code inside main() function can throw an exception; there is no try-catch block handling this properly
   }
+

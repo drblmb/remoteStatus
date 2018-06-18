@@ -13,9 +13,9 @@ public:
   bool SendAndReceive();
 
 private:
-  char target_host[BUFFLEN];
-  UINT16 target_port;
-  TcpClient* client;
+  char target_host[BUFFLEN]; // @JP@ std::string?
+  UINT16 target_port; // @JP@ uint16_t?
+  TcpClient* client; // @JP@ why hold as a member, the only usage is inside the SendAndReceive() method
   bool keep_running;
 };
 
